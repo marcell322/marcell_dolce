@@ -46,6 +46,7 @@ import type {
   Chord,
   ElementId,
   InlineItem,
+  Lyric,
   LyricLineInfo,
   Mark,
   Measure,
@@ -93,6 +94,16 @@ function chordOrnaments(ch: Chord): Ornament[] {
 }
 
 const GRACE_DURATION: Readonly<Record<string, number>> = { eighth: 8, "16th": 16, "32nd": 32 };
+
+function lyricSyllableOf(hit: Lyric | undefined, source: SourceSpan): LyricSyllable {
+  const text = hit?.text ?? "";
+  const printedText = text && (hit?.syllabic === "begin" || hit?.syllabic === "middle")
+    ? text + "-"
+    : text;
+  const syl: LyricSyllable = { text: printedText, source };
+  if (hit?.trailingPunctuation) syl.trailingPunctuation = hit.trailingPunctuation;
+  return syl;
+}
 
 /** 一个和弦 → 文本谱音符（主音或倚音）。 */
 function noteOf(ch: Chord, graceBefore: NoteElement[]): NoteElement {
@@ -355,9 +366,7 @@ function rowLyrics(row: RowBuild, infos: readonly LyricLineInfo[] | undefined): 
             (l.numberTo ?? l.number) === info.verseTo &&
             (l.lineIndex === undefined || l.lineIndex === lineIdx),
         );
-        const syl: LyricSyllable = { text: hit?.text ?? "", source: info.sources?.[a] ?? hit?.source ?? ZERO };
-        if (hit?.trailingPunctuation) syl.trailingPunctuation = hit.trailingPunctuation;
-        syllables.push(syl);
+        syllables.push(lyricSyllableOf(hit, info.sources?.[a] ?? hit?.source ?? ZERO));
       }
       const line: PuLyricLine = {
         verseFrom: info.verseFrom,
@@ -384,9 +393,7 @@ function rowLyrics(row: RowBuild, infos: readonly LyricLineInfo[] | undefined): 
     for (const a of row.anchors) {
       const hit = (a.lyrics ?? []).find((l) => v >= l.number && v <= (l.numberTo ?? l.number));
       if (hit?.verseLabel !== undefined) label = hit.verseLabel;
-      const syl: LyricSyllable = { text: hit?.text ?? "", source: hit?.source ?? ZERO };
-      if (hit?.trailingPunctuation) syl.trailingPunctuation = hit.trailingPunctuation;
-      syllables.push(syl);
+      syllables.push(lyricSyllableOf(hit, hit?.source ?? ZERO));
     }
     // 全空就不产生这一行
     if (!syllables.some((s) => s.text !== "")) continue;
@@ -910,4 +917,3 @@ export function docView(doc: ScoreDoc): DocView {
   views.set(doc, view);
   return view;
 }
-
