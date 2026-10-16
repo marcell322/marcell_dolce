@@ -6,6 +6,7 @@ import { ScorePainter } from "../layout/painter";
 import { isTauriRuntime, saveBytes } from "./fileio";
 import { CONVERT_TARGETS, targetSpec, type ConvertTarget } from "../model/convert";
 import { asset } from "../common/asset";
+import * as opentype from "opentype.js";
 import { scoreDocToMusicXml } from "../model/toxml";
 import { loadScoreDoc } from "../model/fromxml";
 import { jpwToScoreDoc } from "../model/fromjpw";
@@ -260,6 +261,89 @@ export async function exportMixedPdf(app: App): Promise<void> {
     const bytes = new Uint8Array(pdf.output("arraybuffer"));
     await saveBytes(bytes, `${painter.title || t("export.staffName")}.pdf`, "application/pdf");
   }
+}
+
+let pdfBravuraFont: opentype.Font | null = null;
+async function outlineBravuraText(svg: SVGSVGElement): Promise<void> {
+  if (!pdfBravuraFont) {
+    const buffer = await fetch(asset("redist/Bravura.otf")).then((response) => response.arrayBuffer());
+    pdfBravuraFont = opentype.parse(buffer);
+  }
+  const font = pdfBravuraFont;
+  for (const text of svg.querySelectorAll("text")) {
+    if (!(text.getAttribute("font-family") ?? "").replace(/[\"']/g, "").split(",").some((family) => family.trim() === "Bravura")) continue;
+    const chars = Array.from(text.textContent ?? "");
+    const size = Number.parseFloat(text.getAttribute("font-size") ?? "");
+    if (!chars.length || !(size > 0)) continue;
+
+    const xs = (text.getAttribute("x") ?? "0").trim().split(/[\s,]+/).map(Number);
+    const x0 = Number.isFinite(xs[0]) ? xs[0] : 0;
+    const y = Number.parseFloat(text.getAttribute("y") ?? "0") || 0;
+    let cursorX = x0;
+    const group = document.createDocumentFragment();
+    for (let i = 0; i < chars.length; i++) {
+      if (Number.isFinite(xs[i])) cursorX = xs[i];
+      const glyph = font.charToGlyph(chars[i]);
+      const pathData = glyph.getPath(cursorX, y, size).toPathData(3);
+      if (pathData) {
+        const path = document.createElementNS(SVG_NS, "path");
+        path.setAttribute("d", pathData);
+        for (const name of ["fill", "fill-opacity", "opacity", "class", "style", "transform", "clip-path", "mask"]) {
+          const value = text.getAttribute(name);
+          if (value !== null) path.setAttribute(name, value);
+        }
+        group.appendChild(path);
+      }
+      cursorX += (glyph.advanceWidth ?? 0) * size / font.unitsPerEm;
+    }
+    text.replaceWith(group);
+  }
+}
+
+/** Export the currently rendered As printed pages as a vector PDF. */
+export async function exportAsPrintedPdf(app: App): Promise<void> {
+  const svgs = app.pageEls
+    .map((page) => page.querySelector("svg"))
+    .filter((svg): svg is SVGSVGElement => svg instanceof SVGSVGElement);
+  if (!svgs.length) throw new Error(t("export.noSvg"));
+
+  const pages = await Promise.all(svgs.map(async (svg) => {
+    const { width, height } = svgSize(svg);
+    const clone = svg.cloneNode(true) as SVGSVGElement;
+    clone.setAttribute("xmlns", SVG_NS);
+    clone.setAttribute("width", `${width}pt`);
+    clone.setAttribute("height", `${height}pt`);
+    await outlineBravuraText(clone);
+    paintBg(clone, app.bgColor);
+    return { svg: clone, width, height };
+  }));
+  const filename = `${baseName(app)}.pdf`;
+
+  if (isTauriRuntime()) {
+    const { invoke } = await import("@tauri-apps/api/core");
+    const { save } = await import("@tauri-apps/plugin-dialog");
+    const outPath = await save({ defaultPath: filename, filters: [{ name: "PDF", extensions: ["pdf"] }] });
+    if (!outPath) return;
+    await invoke("export_pdf_cmd", {
+      pagesSvg: pages.map(({ svg }) => new XMLSerializer().serializeToString(svg)),
+      widthPt: pages[0].width,
+      heightPt: pages[0].height,
+      outPath,
+    });
+    return;
+  }
+
+  const [{ jsPDF }, { svg2pdf }] = await Promise.all([import("jspdf"), import("svg2pdf.js")]);
+  const first = pages[0];
+  const orientation = first.width >= first.height ? "landscape" : "portrait";
+  const pdf = new jsPDF({ unit: "pt", format: [first.width, first.height], orientation, compress: true });
+  for (let i = 0; i < pages.length; i++) {
+    const page = pages[i];
+    const pageOrientation = page.width >= page.height ? "landscape" : "portrait";
+    if (i > 0) pdf.addPage([page.width, page.height], pageOrientation);
+    await svg2pdf(page.svg, pdf, { x: 0, y: 0, width: page.width, height: page.height });
+  }
+  await saveBytes(new Uint8Array(pdf.output("arraybuffer")), filename, "application/pdf");
 }
 
 /** 一个导出项：显示名 + 在什么状态下可用 + 怎么导。

@@ -139,6 +139,7 @@ export class App implements OmrHost, PlaybackHost, FormatHost, FormatSwitchHost,
   /** 排版模式切换（展开 / 原样 / 五线谱 / 混排）的四个按钮，见 `ViewMode`。 */
   private _viewBtns = new Map<ViewMode, HTMLButtonElement>();
   private _viewSwitchEl: HTMLElement | null = null;
+  private _svgPdfBtnEl: HTMLButtonElement | null = null;
   /** `.musicxml` 读不出来时五线谱/混排两档置灰；文本格式一律可点（派生失败在点的时候报）。 */
   private _mixedAvailable = false;
   /** 代码区标题栏的格式下拉：识别结果与打开的文件共用（见 editor/formatswitch.ts）。 */
@@ -1583,6 +1584,7 @@ export class App implements OmrHost, PlaybackHost, FormatHost, FormatSwitchHost,
     this.pageIndex = opts.resetPageIndex
       ? 0
       : Math.min(this.pageIndex, Math.max(0, this.pageEls.length - 1));
+    this._syncSvgPdfButton();
   }
 
   private renderPages(): void {
@@ -2340,6 +2342,15 @@ export class App implements OmrHost, PlaybackHost, FormatHost, FormatSwitchHost,
     this._syncViewModeButtons();
   }
 
+  setSvgPdfButton(button: HTMLButtonElement): void {
+    this._svgPdfBtnEl = button;
+    this._syncSvgPdfButton();
+  }
+
+  private _syncSvgPdfButton(): void {
+    if (this._svgPdfBtnEl) this._svgPdfBtnEl.hidden = this.mode !== "jp" || this.layoutMode !== "original" || this.pageEls.length === 0;
+  }
+
   /** 当前处于哪一档。识别模式沿用「简谱那一侧」的档（工具条上它不是独立一档）。 */
   get viewMode(): ViewMode {
     if (this.mode === "mixed") return this.mixedShowJianpuLayer ? "mixed" : "staff";
@@ -2377,6 +2388,7 @@ export class App implements OmrHost, PlaybackHost, FormatHost, FormatSwitchHost,
       btn.classList.toggle("active", on);
       btn.setAttribute("aria-pressed", String(on));
     }
+    this._syncSvgPdfButton();
   }
 
   // ---------------- OmrHost：识别控制器要的那几样能力 ----------------

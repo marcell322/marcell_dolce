@@ -6,7 +6,7 @@ import { App, type ViewMode } from "./editor/app";
 import { IMAGE_EXT, IMAGE_ACCEPT, isDocFile, isImageFile } from "./common/filetypes";
 import { showOptionsDialog, showHanConvDialog } from "./editor/dialogs";
 import { showPartsPanel } from "./editor/parts";
-import { showExportDialog, showSaveAsDialog } from "./editor/export";
+import { exportAsPrintedPdf, showExportDialog, showSaveAsDialog } from "./editor/export";
 import { showHelpDialog } from "./editor/help";
 import { encodeJpwabc, isTauriRuntime } from "./editor/fileio";
 import { maybeAutoCheck } from "./editor/update";
@@ -205,6 +205,14 @@ async function boot() {
   const on = (id: string, fn: () => void) =>
     document.getElementById(id)?.addEventListener("click", fn);
   on("btn-save", () => void app.saveFile());
+  const svgPdfBtn = document.getElementById("btn-svg-pdf") as HTMLButtonElement | null;
+  if (svgPdfBtn) {
+    app.setSvgPdfButton(svgPdfBtn);
+    svgPdfBtn.addEventListener("click", () => {
+      svgPdfBtn.disabled = true;
+      void exportAsPrintedPdf(app).catch(console.error).finally(() => { svgPdfBtn.disabled = false; });
+    });
+  }
   on("btn-saveas", () => showSaveAsDialog(app));
   on("btn-prev", () => app.prevPage());
   on("btn-next", () => app.nextPage());

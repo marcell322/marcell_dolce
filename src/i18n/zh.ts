@@ -7,6 +7,7 @@ export const zh = {
   "header.brandAria": "悦谱 Dolce",
   "header.subtitle": "乐谱工作台",
   "header.save": "保存",
+  "header.svgPdf": "SVG 转 PDF 下载",
   "header.saveAs": "另存为",
   "header.export": "导出",
   "header.more": "更多",

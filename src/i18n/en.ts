@@ -8,6 +8,7 @@ export const en: Record<MsgKey, string> = {
   "header.brandAria": "Dolce",
   "header.subtitle": "Score Workbench",
   "header.save": "Save",
+  "header.svgPdf": "Svg to pdf download",
   "header.saveAs": "Save As",
   "header.export": "Export",
   "header.more": "More",
