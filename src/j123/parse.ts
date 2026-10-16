@@ -445,6 +445,7 @@ function buildMusicLine(
     /** 收在「带着增时线的音」上的弧：后面再来增时线，说明弧是收在增时线中间的（`1-)-`），终点改记到当时最后那根增时线上 */
     arcEnds: { mk: Mark; host: Chord; su: Sustain }[];
   } = { last: null, sustainHost: null, justClosedTuplet: false, arcEnds: [] };
+  let lastSustain: Sustain | null = null;
   /** ABC：上一个 `-` 还没配到下一个音符（tie 的 stop 端） */
   let pendingTie = false;
   /** ABC：上一个 `>`/`<` 还欠着——正数表示下一个音符要减半、上一个加附点 */
@@ -555,6 +556,8 @@ function buildMusicLine(
   };
 
   for (const t of tokens) {
+    const previousSustain = lastSustain;
+    if (t.kind !== "space") lastSustain = null;
     switch (t.kind) {
       case "space":
         // 只影响 ABC 的符杠分组（123 不看）。**不能清 `sustainHost`**——`5 - 3 -` 这种带空格的写法是常态，
@@ -631,6 +634,7 @@ function buildMusicLine(
         for (const a of cur.arcEnds) if (a.host === host) a.mk.end = a.su.id;
         cur.arcEnds = [];
         (host.sustains ??= []).push(s);
+        lastSustain = s;
         host.duration = ctx.d.reduration(host, ctx.len);
         sawSpaceSinceLastNote = false;
         break;
@@ -782,11 +786,13 @@ function buildMusicLine(
         // 写在线**之后**（小节还一个元素都没有）的是**左线**上的记号——segno/coda 这类跳转目标；
         // 写在线之前的攒着，等下面 `case "barline"` 把它挂到那条右线上。
         // ABC 的渐强渐弱 `!crescendo(!` / `!<(!` … `!crescendo)!` / `!<)!`（渐弱 `diminuendo` / `>`）：
-        // 起点同弧一样由下一个元素回填；收尾的装饰写在收尾那个音**前面**，也等下一个元素
+        // 起点同弧一样由下一个元素回填；收尾装饰写在收尾音前面时等下一个元素，
+        // 紧跟最后一根增时线时则直接收在那根线上。
         const wedge = /^(crescendo|<|diminuendo|decrescendo|>)([()])$/.exec(deco);
         if (wedge) {
           const type = wedge[1] === "crescendo" || wedge[1] === "<" ? "crescendo" : "diminuendo";
           if (wedge[2] === "(") pb.openWedges.push({ type: "wedge", start: 0, level: 0, wedgeType: type, openSource: t.source, abcDeco: true });
+          else if (previousSustain) closeWedge(type, previousSustain.id, t.source, true);
           else pb.wedgeCloseNext.push({ type, source: t.source });
           break;
         }
