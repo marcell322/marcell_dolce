@@ -33,6 +33,10 @@ function svgSize(svg: SVGSVGElement): { width: number; height: number } {
   throw new Error(t("export.noPageSize"));
 }
 
+function stripPreviewAnnotations(svg: SVGSVGElement): void {
+  svg.querySelectorAll(".preview-bar-number").forEach((el) => el.remove());
+}
+
 const musicFontDataUrls = new Map<string, Promise<string>>();
 async function musicFontDataUrl(file: string): Promise<string> {
   if (!musicFontDataUrls.has(file)) {
@@ -69,6 +73,7 @@ function paintBg(svg: SVGSVGElement, bgColor: number): void {
 async function svgToBytes(svg: SVGSVGElement, scale: number, bg = "#fff"): Promise<Uint8Array> {
   const { width: w, height: h } = svgSize(svg);
   const clone = svg.cloneNode(true) as SVGSVGElement;
+  stripPreviewAnnotations(clone);
   clone.setAttribute("xmlns", SVG_NS);
   clone.setAttribute("width", String(w));
   clone.setAttribute("height", String(h));
@@ -310,6 +315,7 @@ export async function exportAsPrintedPdf(app: App): Promise<void> {
   const pages = await Promise.all(svgs.map(async (svg) => {
     const { width, height } = svgSize(svg);
     const clone = svg.cloneNode(true) as SVGSVGElement;
+    stripPreviewAnnotations(clone);
     clone.setAttribute("xmlns", SVG_NS);
     clone.setAttribute("width", `${width}pt`);
     clone.setAttribute("height", `${height}pt`);

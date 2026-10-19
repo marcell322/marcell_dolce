@@ -157,8 +157,12 @@ export function paintBrace(c: OriginalCtx, root: Group, x: number, top: number, 
   // 右侧的细竖线：整组一根到底，**不像小节线那样在歌词处断开**；
   // 比粗线短一截，两端给花头留空隙
   const inset = ink * 0.42;
-  root.add(rect(c.ink, x + gap - thin / 2, top - inset, thin, bottom - top + inset * 2));
+  const separator = rect(c.ink, x + gap - thin / 2, top - inset, thin, bottom - top + inset * 2);
+  separator.classes.add("preview-bar-number-anchor");
+  root.add(separator);
   // 上下花头：字形基线分别落在粗线两端
-  root.add(text(BRACKET.top, x - thick / 2, y0, font, c.ink));
+  const topBracket = text(BRACKET.top, x - thick / 2, y0, font, c.ink);
+  topBracket.classes.add("preview-bar-number-cap");
+  root.add(topBracket);
   root.add(text(BRACKET.bottom, x - thick / 2, y1, font, c.ink));
 }

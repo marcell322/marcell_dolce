@@ -7,6 +7,7 @@
 
 import type { PlayItem } from "../score/playorder";
 import { Group, PageItem, TextFrame } from "./pageitem";
+import { Font } from "./font";
 import type { ElementId, ScoreDoc } from "../model/doc";
 import { headerPartsOf, mixedVisitor, renderPageSvg, type HeaderPart } from "./render";
 import { pageGeometry, type LayoutResult } from "./result";
@@ -25,6 +26,7 @@ import { layoutJianpu, type JianpuLayout } from "./jianpu/compose";
 import { clearSongBreaks } from "../model/breaks";
 import type { PlacedPage } from "./jianpu/place";
 import type { JianpuGrid } from "./jianpu/metrics";
+import type { DocView } from "../pu/slots";
 import { ScoreIndex, type Hit } from "./scoreindex";
 import { Playhead, spanIn, svgBox } from "./playhead";
 import type { IdentityKind } from "./identity";
@@ -143,6 +145,54 @@ interface StaffState {
 
 const isStaffRequest = (r: PaintRequest): r is StaffPaintRequest => r.view === "staff" || r.view === "mixed";
 
+function barNumbersOf(view: DocView): Map<ElementId, string> {
+  const out = new Map<ElementId, string>();
+  for (const song of view.songs) {
+    for (const page of song.pages) {
+      for (const group of page.groups) {
+        const row = group.voices[0];
+        if (!row) continue;
+        row.elements.forEach((element, i) => {
+          const id = view.idOf.get(element);
+          const ref = row.refs[i];
+          if (id !== undefined && ref && !out.has(id)) out.set(id, ref.measure.number);
+        });
+      }
+    }
+  }
+  return out;
+}
+
+function firstNoteIn(system: PageItem): PageItem | null {
+  const stack = [...system.children].reverse();
+  while (stack.length > 0) {
+    const item = stack.pop()!;
+    if (item.ident?.kind === "note" && item.ident.id !== undefined) return item;
+    for (let i = item.children.length - 1; i >= 0; i--) stack.push(item.children[i]!);
+  }
+  return null;
+}
+
+function previewBarNumberAnchor(system: PageItem): PageItem | null {
+  const stack = [...system.children].reverse();
+  while (stack.length > 0) {
+    const item = stack.pop()!;
+    if (item.classes.has("preview-bar-number-anchor")) return item;
+    for (let i = item.children.length - 1; i >= 0; i--) stack.push(item.children[i]!);
+  }
+  return null;
+}
+
+function previewBarNumberCap(system: PageItem): TextFrame | null {
+  const stack = [...system.children].reverse();
+  while (stack.length > 0) {
+    const item = stack.pop()!;
+    if (item.classes.has("preview-bar-number-cap") && item instanceof TextFrame) return item;
+    for (let i = item.children.length - 1; i >= 0; i--) stack.push(item.children[i]!);
+  }
+  return null;
+}
+
 /** 可视化编辑选中挂在音符上的子项的角色（就是身份标签的 kind，见 `identity.ts`）。 */
 export type VisualPartRole = "aug-dot" | "harmony" | "deco" | "annotation";
 
@@ -162,6 +212,7 @@ export class ScorePainter {
   pageHeight = 0;
   /** 当前结果。null = 还没排过。 */
   result: LayoutResult | null = null;
+  private jianpuBarNumbers = new Map<ElementId, string>();
   /** PageItem -> rendered <g>, populated each renderPage (for DOM picking). */
   nodeMap = new WeakMap<PageItem, SVGGElement>();
   /** 身份索引（按图元上的身份标签收，见 `scoreindex.ts`）：试听高亮、点选、可视化编辑查它。简谱、五线谱 / 混排同一份。 */
@@ -234,6 +285,7 @@ export class ScorePainter {
     this.nodeMap = new WeakMap();
     this.index = ScoreIndex.empty();
     this.original = null;
+    this.jianpuBarNumbers.clear();
   }
 
   /** 简谱这一路（原样 / 展开档）：整份文档排好（不等资源，`Font` 同步量字），返回提交动作。 */
@@ -271,6 +323,7 @@ export class ScorePainter {
     return () => {
       this.original = r;
       this.staff = null;
+      this.jianpuBarNumbers = barNumbersOf(r.view);
       this.jianpuView = req.view;
       this.pageWidth = r.width;
       this.pageHeight = r.height;
@@ -302,6 +355,7 @@ export class ScorePainter {
     return () => {
       this.staff = { score, pages, placed };
       this.original = null;
+      this.jianpuBarNumbers.clear();
       this.result = result;
       this.nodeMap = new WeakMap();
       this.leafMap = new WeakMap();
@@ -513,6 +567,48 @@ export class ScorePainter {
   }
 
   // ---------------- SVG rendering ----------------
+
+  /** 给编辑器简谱预览添加每行首小节号；不改页面树，因此不会进入导出。 */
+  appendPreviewBarNumbers(svg: SVGSVGElement, pageIndex: number): void {
+    const root = this.result?.pages[pageIndex]?.root;
+    const layoutPage = this.original?.placed.pages[pageIndex];
+    if (!root || !layoutPage || !this.original) return;
+
+    const systems: PageItem[] = [];
+    const visit = (item: PageItem): void => {
+      if (item.ident?.kind === "system") systems.push(item);
+      else for (const child of item.children) visit(child);
+    };
+    visit(root);
+
+    const fontSize = this.original.metrics.style.size.note * 0.82;
+    for (const system of systems) {
+      const note = firstNoteIn(system);
+      const id = note?.ident?.id;
+      const number = id === undefined ? undefined : this.jianpuBarNumbers.get(id);
+      const systemEl = this.nodeMap.get(system);
+      if (!note || !number || !systemEl || systemEl.ownerSVGElement !== svg) continue;
+
+      const anchor = previewBarNumberAnchor(system);
+      const cap = previewBarNumberCap(system);
+      const pos = anchor?.pos(system) ?? note.pos(system);
+      const capTop = cap ? cap.pos(system).y + cap.font.charBound(cap.text).top : null;
+      const labelFont = new Font(this.original.metrics.style.font.text.family, fontSize, true);
+      const labelInk = labelFont.charBound(number);
+      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      label.setAttribute("class", "preview-bar-number");
+      label.setAttribute("x", String(anchor ? pos.x + anchor.width / 2 : pos.x - fontSize * 0.2));
+      label.setAttribute("y", String(capTop !== null
+        ? capTop - fontSize * 0.15 - labelInk.bottom
+        : pos.y - fontSize * 0.9));
+      label.setAttribute("text-anchor", anchor ? "middle" : "end");
+      label.setAttribute("font-family", this.original.metrics.style.font.text.family);
+      label.setAttribute("font-size", String(fontSize));
+      label.setAttribute("font-weight", "600");
+      label.textContent = number;
+      systemEl.appendChild(label);
+    }
+  }
 
   /** 第 `pageIndex` 页渲染成独立的 `<svg>`（viewBox 是原生坐标：简谱排版单位 / 五线谱 tenths）。 */
   renderPage(pageIndex: number): SVGSVGElement {

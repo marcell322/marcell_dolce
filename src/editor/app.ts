@@ -1597,7 +1597,8 @@ export class App implements OmrHost, PlaybackHost, FormatHost, FormatSwitchHost,
       },
       // 原样文档没有几何拾取，双向定位靠事件冒泡找 `<g>`
       onPage: this.painter.renderer === "jianpu"
-        ? (svg) => {
+        ? (svg, _wrap, i) => {
+          this.painter.appendPreviewBarNumbers(svg, i);
           svg.addEventListener("click", (ev) => this._onSyncClick(ev));
           svg.addEventListener("dblclick", (ev) => this._onSyncDblClick(ev));
         }

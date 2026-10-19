@@ -632,6 +632,13 @@ button:focus-visible, select:focus-visible {
   width: 100%;
   height: 100%;
 }
+.score-page .preview-bar-number {
+  fill: #000;
+  font-weight: 500;
+  opacity: 0.8;
+  pointer-events: none;
+  user-select: none;
+}
 
 #measure-svg {
   position: absolute;
