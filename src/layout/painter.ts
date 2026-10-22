@@ -8,7 +8,7 @@
 import type { PlayItem } from "../score/playorder";
 import { Group, PageItem, TextFrame } from "./pageitem";
 import { Font } from "./font";
-import type { ElementId, ScoreDoc } from "../model/doc";
+import { SIMPLE_DIVISIONS, type ElementId, type Measure, type ScoreDoc, type Song } from "../model/doc";
 import { headerPartsOf, mixedVisitor, renderPageSvg, type HeaderPart } from "./render";
 import { pageGeometry, type LayoutResult } from "./result";
 import { MetaData } from "../smufl/smufl";
@@ -147,7 +147,24 @@ const isStaffRequest = (r: PaintRequest): r is StaffPaintRequest => r.view === "
 
 function barNumbersOf(view: DocView): Map<ElementId, string> {
   const out = new Map<ElementId, string>();
+  const numbersByMeasure = new Map<Measure, string>();
+  const hiddenPickupMeasures = new Set<Measure>();
+  let measureOffset = 0;
   for (const song of view.songs) {
+    let measureCount = 0;
+    for (const part of song.song.parts) {
+      const pickup = isOpeningPickup(song.song, part.measures[0]);
+      measureCount = Math.max(measureCount, part.measures.length - (pickup ? 1 : 0));
+      if (pickup && part.measures[0]) hiddenPickupMeasures.add(part.measures[0]);
+      for (const [index, measure] of part.measures.entries()) {
+        if (pickup && index === 0) continue;
+        const localNumber = measure.number;
+        const number = /^\d+$/.test(localNumber)
+          ? String(measureOffset + Number(localNumber) - (pickup ? 1 : 0))
+          : localNumber;
+        numbersByMeasure.set(measure, number);
+      }
+    }
     for (const page of song.pages) {
       for (const group of page.groups) {
         const row = group.voices[0];
@@ -155,12 +172,37 @@ function barNumbersOf(view: DocView): Map<ElementId, string> {
         row.elements.forEach((element, i) => {
           const id = view.idOf.get(element);
           const ref = row.refs[i];
-          if (id !== undefined && ref && !out.has(id)) out.set(id, ref.measure.number);
+          if (id === undefined || !ref || out.has(id)) return;
+          if (hiddenPickupMeasures.has(ref.measure)) return;
+          const number = numbersByMeasure.get(ref.measure);
+          if (!number) return;
+          out.set(id, number);
         });
       }
     }
+    measureOffset += measureCount;
   }
   return out;
+}
+
+function measureLength(measure: Measure): number {
+  const voiceEnds = new Map<number, number>();
+  for (const el of measure.elements) {
+    const start = el.onset ?? voiceEnds.get(el.voice) ?? 0;
+    const duration = el.kind === "chord" ? (el.grace ? 0 : el.duration.divisions) : el.duration?.divisions ?? 0;
+    voiceEnds.set(el.voice, start + duration);
+  }
+  return Math.max(measure.duration ?? 0, ...voiceEnds.values());
+}
+
+function isOpeningPickup(song: Song, measure: Measure | undefined): boolean {
+  if (!measure || measure.implicit || measure.elements.length === 0) return false;
+  const time = measure.attrs?.time ?? song.time ?? song.extraTimes?.[0];
+  if (!time || time.beats <= 0 || time.beatType <= 0) return false;
+  const divisions = measure.attrs?.divisions ?? SIMPLE_DIVISIONS;
+  const actual = measureLength(measure) / divisions;
+  const expected = (time.beats * 4) / time.beatType;
+  return actual > 0 && actual < expected - 1e-6;
 }
 
 function firstNoteIn(system: PageItem): PageItem | null {

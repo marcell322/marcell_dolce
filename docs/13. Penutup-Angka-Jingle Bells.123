@@ -1,0 +1,347 @@
+%123-1.0
+
+X:1
+T:Jingle Bells
+C:James L. Pierpont
+C:Philip Lawson
+C:Translate by, Marcell.
+K:1=F
+M:4/4
+Q:1/4=126
+Q:"1/4=126"
+V:1 name="S"
+0 !mp!2_ (2_ (2-) | 2---) | 0 b3_ (b3_ (b3-) | b3---) | $
+w:Jin-gle,_/Jin-gle.
+V:2 name="A"
+0 0 !mp!1_ (1_ (1) | 1---) | 0 0 b2_ (b2_ (b2) | b2---) | $
+w:Jin-gle,_/Jin-gle.
+V:3 name="T"
+0 0 0 !mp!6_ (6_ | 6---) | 0 0 0 b7_ (b7_ | b7---) | $
+w:Jin-gle,_/Jin-gle.
+V:4 name="B"
+!mp!5_ (5_ (5--) | 5---) | b6_ (b6_ (b6--) | b6---) | $
+w:Jin-gle,_/Jin-gle.
+V:1
+"^cresc."!>!3_ !>!3_ 0 !>!4_ !>!4_ 0 | !>!#4_ !>!#4_ 0 !>!#5_ !>!#5_ 0 | !f!6_ 5_ (4 4_) 4_ 4_ 4_ | !fermata!!rit!!diminuendo(!5---!diminuendo)! | "^a tempo"0 0 0 0 | $
+w:Dash-ing,dash-ing,dash-ing,dash-ing,dash-ing all_a-long the way.
+V:2
+"^cresc."!>!2_ !>!2_ 0 !>!2_ !>!2_ 0 | !>!2_ !>!2_ 0 !>!2_ !>!2_ 0 | 0 !f!4_ 3_ 2_ 2_ 2_ 2_ | !fermata!!rit!!diminuendo(!5---!diminuendo)! | "^a tempo"0 0 0 0 | $
+w:Dash-ing,dash-ing,dash-ing,dash-ing,dash-ing all a-long the way.
+V:3
+"^cresc."!>!7_ !>!7_ 0 !>!7_ !>!7_ 0 | !>!7_ !>!7_ 0 !>!7_ !>!7_ 0 | 6 0 !f!2'_ 1'_ 7_ 6_ | !fermata!!rit!!diminuendo(!5---!diminuendo)! | "^a tempo"0 0 0 0 | $
+w:Dash-ing,dash-ing,dash-ing,dash-ing,all,all a-long the way.
+V:4
+"^cresc."!>!b6_ !>!b6_ 0 !>!5_ !>!5_ 0 | !>!#4_ !>!#4_ 0 !>!3_ !>!3_ 0 | 6, 0 !f!2_ 2_ 2_ 2_ | !fermata!!rit!!diminuendo(!5---!diminuendo)! | "^a tempo"0 0 0 0 | $
+w:Dash-ing,dash-ing,dash-ing,dash-ing,all,all a-long the way.
+V:1
+0 0 0 0 | !mf!3_ 3_ 3 3_ 3_ 3 | 3_ 5_ 1_. 2__ 3- | $
+w:Jin-gle bells,jin-ngle bells,jin-gle all the way!
+V:2
+0 0 0 0 | !mf!1_ 1_ 7, 1_ 1_ 7, | 1_ 3_ 6,_. 7,__ 1- | $
+w:Jin-gle bells,jin-ngle bells,jin-gle all the way!
+V:3
+0 0 0 0 | !mf!5_ 5_ b6 5_ 5_ b6 | 5_ 1'_ 6_. 6__ 5- | $
+w:Jin-gle bells,jin-ngle bells,jin-gle all the way!
+V:4
+0 0 0 0 | !mf!1_ 1_ 1 1_ 1_ 1 | 1_ 1_ 4_. 4__ 1- | $
+w:Jin-gle bells,jin-ngle bells,jin-gle all the way!
+V:1
+4_ 4_ 4_. 4__ 4_ 3_ 3_ 3__ 3__ | 3_ 2_ 2_ 3_ 2 !>!!f!5 | $$
+w:Oh,what fun it is to ride in a one horse o-pen sleigh,hey!
+V:2
+1_ 1_ 2_. 2__ 2_ 1_ 1_ 1__ 1__ | 7,_ 7,_ 6,_ 6,_ 7, !>!!f!#1 | $$
+w:Oh,what fun it is to ride in a one horse o-pen sleigh,hey!
+V:3
+6_ 6_ b6_. b6__ 5_ 5_ 5_ 5__ 5__ | #4_ #4_ 3_ #4_ 5 !>!!f!7 | $$
+w:Oh,what fun it is to ride in a one horse o-pen sleigh,hey!
+V:4
+4_ 4_ 2_. 2__ 3_ 3_ 6,_ 6,__ 6,__ | 2_ 2_ 2_ 2_ 5, !>!!f!4 | $$
+w:Oh,what fun it is to ride in a one horse o-pen sleigh,hey!
+V:1
+!mf!3_ 3_ 3 3_ 3_ 3 | 3_ 5_ 1_. 2__ 3- | 4_ 4_ 4_. 4__ 4_ 3_ 3_ 3__ 3__ | $
+w:Jin-gle bells,jin-ngle bells,jin-gle all the way!Oh,what fun it is to ride in a
+V:2
+!mf!1_ 1_ 7, 1_ 1_ 7, | 1_ 3_ 1_. 1__ (1 7,) | 1_ 1_ #1_. #1__ #1_ #1_ #1_ #1__ #1__ | $
+w:Jin-gle bells,jin-ngle bells,jin-gle all the way!/Oh,what fun it is to ride in a
+V:3
+!mf!5_ 5_ b6 5_ 5_ b6 | 5_ 1'_ 6_. 6__ #5- | 6_ 6_ 5_. 5__ 5_ 5_ 5_ 6__ 6__ | $
+w:Jin-gle bells,jin-ngle bells,jin-gle all the way!Oh,what fun it is to ride in a
+V:4
+!mf!1_ 1_ 1 1_ 1_ 1 | 1_ 1_ 4_. 4__ 3- | 4_ 4_ 4_. 4__ 4_ 3_ 3_ 3__ 3__ | $
+w:Jin-gle bells,jin-ngle bells,jin-gle all the way!Oh,what fun it is to ride in a
+V:1
+5_ 5_ 4_ 2_ 1- | "^1=Bb;1=5"5_ 3'_ 2'_ 1'_ 5. 5__ 5__ | 5_ 3'_ 2'_ 1'_ 6- | $
+w:one horse o-pen sleigh.Dash-ing through the snow in a one horse o-pen sleigh,
+V:2
+3_ 3_ 2_ 7,_ 1- | 0 "^1=Bb;1=5"5_ 6_ 5_ 3_ (4 | 3_) 3__ 3__ 3_ 6_ 5_ 3_ (5 | $
+w:one horse o-pen sleigh.Dash-ing through the snow_in a one horse o-pen sleigh,_
+V:3
+6_ 6_ 6_ 7_ 1'- | 0 0 "^1=Bb;1=5"5_ 3'_ 2'_ 1'_ | 5. 5__ 5__ 5_ 3'_ 2'_ 1'_ | $
+w:one horse o-pen sleigh.Dash-ing through the snow in a one horse o-pen
+V:4
+5_ 5_ 5_ 5_ 1- | "^1=Bb;1=5"5_ 3'_ 2'_ 1'_ 5. 5__ 5__ | 5_ 3'_ 2'_ 1'_ 6- | $
+w:one horse o-pen sleigh.Dash-ing through the snow in a one horse o-pen sleigh,
+V:1
+6_ 4'_ 3'_ 2'_ 7- | 5'_ 5'_ 4'_ 2'_ 3- | 5_ 3'_ 2'_ 1'_ 5- | $
+w:O'er the fields we go,laugh-ing all the way.Bells on bob-tail ring,
+V:2
+4) 6_ 1'_ 7_ 6_ 5 | 0 0 1'_ 6_ 4_ 4_ | 3 5_ 6_ 5_ 3_ (4 | $
+w:/O'er the fields we go,laugh-ing all the way.Bells on bob-tail ring,_
+V:3
+6- 6_ 4'_ 3'_ 2'_ | 7 5'_ 4'_ 3'_ 1'_ 6_ b6_ | 5 0 5_ 3'_ 2'_ 1'_ | $
+w:sleigh,O'er the fields we go,laugh-ing,laugh-ing all the way.Bells on bob-tail
+V:4
+6_ 4'_ 3'_ 2'_ 7- | 5_ 5_ 5_ 5_ 1'- | 5_ 3'_ 2'_ 1'_ 5- | $
+w:O'er the fields we go,laugh-ing all the way.Bells on bob-tail ring,
+V:1
+5_ 3'_ 2'_ 1'_ 6. 6_ | 6_ 4'_ 3'_ 2'_ 5'_ 5'_ 5'_. 5'__ | 6'_ 5'_ 4'_ 2'_ 1' !>!2' | $$
+w:mak-ing spir-its bright.What fun it is to ride and sing a sleigh-ing song to-night.Oh.
+V:2
+3) 3_ 6_ 5_ 3_ (5 | 4) 4 3_ 5_ 5_. 5__ | 6_ 1'_ 2'_ 7_ 1' !>!7 | $$
+w:/mak-ing spir-its bright,_to ride and sing a sleigh-ing song to-night.Oh.
+V:3
+5- 5_ 3'_ 2'_ 1'_ | 6 b6 5_ 3'_ 3'_. 3'__ | 4'_ 3'_ 4'_ 2'_ 1' !>!#4' | $$
+w:ring,mak-ing spir-its bright,to ride and sing a sleigh-ing song to-night.Oh.
+V:4
+5_ 3'_ 2'_ 1'_ 6. 6_ | 6_ 4'_ 3'_ 2'_ 1'_ 1'_ b7_. b7__ | 6_ 5_ 4_ 2'_ 1' !>!2' | $$
+w:mak-ing spir-its bright.What fun it is to ride and sing a sleigh-ing song to-night.Oh.
+V:1
+"^1=F; (upper)2=5"3_ 3_ 3 3_ 3_ 3 | 3_ 5_ 1_. 2__ 3- | 4_ 4_ 4_. 4__ 4_ 3_ 3_ 3__ 3__ | $
+w:Jin-gle bells,jin-ngle bells,jin-gle all the way!Oh,what fun it is to ride in a
+V:2
+"^1=F; 7=3"1_ 1_ 7, 1_ 1_ 7, | 1_ 3_ 6,_. 7,__ 1- | 1_ 1_ 2_. 2__ 2_ 1_ 1_ 1__ 1__ | $
+w:Jin-gle bells,jin-ngle bells,jin-gle all the way!Oh,what fun it is to ride in a
+V:3
+"^1=F; (upper)#4=7"5_ 5_ b6 5_ 5_ b6 | 5_ 1'_ 6_. 6__ 5- | 6_ 6_ b6_. b6__ 5_ 5_ 5_ 5__ 5__ | $
+w:Jin-gle bells,jin-ngle bells,jin-gle all the way!Oh,what fun it is to ride in a
+V:4
+"^1=F; (upper)2=5"1_ 1_ 1 1_ 1_ 1 | 1_ 1_ 4_. 4__ 1- | 4_ 4_ 2_. 2__ 3_ 3_ 6,_ 6,__ 6,__ | $
+w:Jin-gle bells,jin-ngle bells,jin-gle all the way!Oh,what fun it is to ride in a
+V:1
+3_ 2_ 2_ 3_ 2_ 5_ 4_ #2_ | 3_ 3_ 3 3_ 3_ 3 | 3_ 5_ 1_. 2__ 3- | $
+w:one horse o-pen sleigh.Come hear those Jin-gle bells,jin-gle bells,jin-ngle all the way!
+V:2
+7,_ 7,_ 6,_ 6,_ 7,_ 7,_ 7,_ 7,_ | 1_ 1_ 7, 1_ 1_ 7, | 1_ 3_ 1_. 1__ (1 7,) | $
+w:one horse o-pen sleigh.Come hear those Jin-gle bells,jin-gle bells,jin-ngle all the way!_
+V:3
+#4_ #4_ 3_ #4_ 5_ 5_ 6_ 7_ | 5_ 5_ b6 5_ 5_ b6 | 5_ 1'_ 6_. 6__ #5- | $
+w:one horse o-pen sleigh.Come hear those Jin-gle bells,jin-gle bells,jin-ngle all the way!
+V:4
+2_ 2_ 2_ 2_ 5,_ 5_ 5_ 5_ | 1_ 1_ 1 1_ 1_ 1 | 1_ 1_ 4_. 4__ 3- | $
+w:one horse o-pen sleigh.Come hear those Jin-gle bells,jin-gle bells,jin-ngle all the way!
+V:1
+4_ 4_ 4_. 4__ 4_ 3_ 3_ 3__ 3__ | 5_ 5_ 4_ 2_ 1- | [M:2/4] 0 0 | $
+w:Oh,what fun it is to ride in a one horse o-pen sleigh.
+V:2
+1_ 1_ #1_. #1__ #1_ #1_ #1_ #1__ #1__ | 3_ 3_ 2_ 7,_ 1- | [M:2/4] 0 0_ "^1=D;3=5"5,_ | $
+w:Oh,what fun it is to ride in a one horse o-pen sleigh.A
+V:3
+6_ 6_ 5_. 5__ 5_ 5_ 5_ 6__ 6__ | 6_ 6_ 6_ 7_ 1'- | [M:2/4] 0 0 | $
+w:Oh,what fun it is to ride in a one horse o-pen sleigh.
+V:4
+4_ 4_ 4_. 4__ 4_ 3_ 3_ 3__ 3__ | 5_ 5_ 5_ 5_ 1- | [M:2/4] 0 0 | $
+w:Oh,what fun it is to ride in a one horse o-pen sleigh.
+V:1
+[M:4/4] "^1=D"(3 4 3- | 3 5 4- | 4 6 5- | 7 6 5-) | "^Tongue clicks, up-down, to imitate a galloping reindeer"X_ X_ X_ X_ X_ X_ X_ X_ | $$
+w:oo///////////clack.clack.clack.clack.clack.clack.clack.clack.
+V:2
+[M:4/4] 5,_ 3_ 2_ 1_ 5,. 5,_ | 5,_ 3_ 2_ 1_ 5,. 6,_ | 6,_ 4_ 3_ 2_ 7,. 7,_ | 5_ 5_ 4_ 2_ 3. 5,_ | 5,_ 3_ 2_ 1_ 5,. 5,__ 5,__ | $$
+w:day or two a-go,The sto-ry I must tell,I went out in the snow And on my back I fell;A gent was rid-ing by in a
+V:3
+[M:4/4] "^1=D"(5 6 5- | 5 3 6- | 6 1' 7- | 2' 1' 1'.) 5_ | 5_ 3'_ 2'_ 1'_ 5. 5__ 5__ | $$
+w:oo________///A gent was rid-ing by in a
+V:4
+[M:4/4] "^1=D"(1--- | 1--- | 1--- | 1---) | "^Tongue clicks, up-down, to imitate a galloping reindeer"X_ X_ X_ X_ X_ X_ X_ X_ | $$
+w:oo///clack.clack.clack.clack.clack.clack.clack.clack.
+V:1
+X_ X_ X_ X_ X_ X_ X_ 6,_ | 6,_ 4_ 3_ 2_ 5_ 5_ 5_. 5__ | $
+w:clack.clack.clack.clack.clack.clack.clack.He laughed as I there sprawl-ing lie,But
+V:2
+5,_ 3_ 2_ 1_ 6,. 6,_ | 6,_ 4_ 3_ 2_ 5_ 5_ 5_. 5__ | $
+w:one horse o-pen sleigh,He laughed as I there sprawl-ing lie,But
+V:3
+5_ 3'_ 2'_ 1'_ 6. 0_ | 0_ 6_ 6_ 6_ 5_ 0_ 0_. 5__ | $
+w:one horse o-pen sleigh.Ha ha ha ha!But
+V:4
+X_ X_ X_ X_ X_ X_ X_ X_ | 0_ 4_ 4_ 4_ 3_ 0_ 0_. 5__ | $
+w:clack.clack.clack.clack.clack.clack.clack.clack.Ha ha ha ha!But
+V:1
+6_ 5_ 4_ 2_ 1 0 | "^f 1=Bb;1=3"5_ 3'_ 2'_ 1'_ 5- | 5_ 3'_ 2'_ 1'_ 6- | $
+w:quick-ly drove a-way.Now the ground is white.Go it while you're young.
+V:2
+6_ 5_ 4_ 2_ 1 0 | 0 "^f 1=Bb;1=3"5_ 6_ 5_ 3_ (4 | 3) 3_ 6_ 5_ 3_ (5 | $
+w:quick-ly drove a-way.Now the ground is white._Go it while you're young._
+V:3
+6_ 5_ 4_ 2_ 1 0 | 0 0 "^f 1=Bb;1=3"5_ 3'_ 2'_ 1'_ | 5- 5_ 3'_ 2'_ 1'_ | $
+w:quick-ly drove a-way.Now the ground is white.Go it while you're
+V:4
+6_ 5_ 4_ 2_ 1 0 | "^f 1=Bb;1=3"5_ 3'_ 2'_ 1'_ 5- | 5_ 3'_ 2'_ 1'_ 6- | $
+w:quick-ly drove a-way.Now the ground is white.Go it while you're young.
+V:1
+6_. 4'__ 3'_ 2'_ 7. 7_ | 5'_ 5'_ 4'_ 2'_ 3'. 3'_ | 5_ 3'_ 2'_ 1'_ 5. 5_ | $
+w:Take the girls to night and sing this sleigh-ing song;Just get a bob-tailed bay,Two
+V:2
+4) 6_. 1'__ 7_ 6_ 5 | 0 0 1'_ 6_ 4_ 4_ | 3 5_ 6_ 5_ 3_ (4 | $
+w:/Take the girls to night,sing this sleigh-ing song;get a bob-tailed bay,_
+V:3
+6- 6_. 4'__ 3'_ 2'_ | 7_ 7_ 5'_ 4'_ 3'_ 1'_ 6_ b6_ | 5 0_ 5_ 5_ 3'_ 2'_ 1'_ | $
+w:young.Take the girls to night and sing,and sing this sleigh-ing song;Just get a bob-tailed
+V:4
+6_. 4'__ 3'_ 2'_ 7. 7_ | 5_ 5_ 5_ 5_ 1'. 1'_ | 5_ 3'_ 2'_ 1'_ 5. 5_ | $
+w:Take the girls to night and sing this sleigh-ing song;Just get a bob-tailed bay,Two
+V:1
+5_ 3'_ 2'_ 1'_ 6- | 6_ 4'_ 3'_ 2'_ 5'_ 5'_ 5'_ 5'_ | [M:2/4] 6'_ 0_ 0 |
+w:for-ty for his speed.Hitch him to an o-pen sleigh and crack!
+V:2
+3_) 3_ 3_ 6_ 5_ 3_ (5 | 4- 3) 0 | [M:2/4] 0 6_ 0_ |
+w:/Two for-ty for his speed,_/crack!
+V:3
+5. 5_ 5_ 3'_ 2'_ 1'_ | (6 b6 5) 0 | [M:2/4] 0 6'_ 0_ |
+w:bay,Two for-ty for his speed,_/crack!
+V:4
+5_ 3'_ 2'_ 1'_ 6- | 6_ 4'_ 3'_ 2'_ 5_ 5_ 5_ 5_ | [M:2/4] 6_ 0_ 0 |
+w:for-ty for his speed.Hitch him to an o-pen sleigh and crack!
+
+V:1
+[M:6/8] 0_0_1'_ 7 7_| [M:4/4] 1' !diminuendo(!(1' 2'-!diminuendo)!)|$$
+w: We'll take the Lead! Oh,_
+V:2
+[M:6/8] 0_0_6_ 5 4_| [M:4/4] 3 !diminuendo(!1' - -!diminuendo)!|$$
+w: We'll take the Lead! Oh,
+V:3
+[M:6/8] 0_0_5'_ 4' 2'_| [M:4/4] 1' !diminuendo(!(1' b7-!diminuendo)!)|$$
+w: We'll take the Lead! Oh,_
+V:4
+[M:6/8] 6,_0_0_ 0_0_0_| [M:4/4] 0 0 0 0| $$
+w: crack!
+
+V:1
+"^pp 1=Gb; 1=3"3'__3'__3'__3'__ 3'_3'_ 3'__3'__3'__3'__ 3'_3'_| 0_3'__3'__ 4'_4'__4'__ 3'__3'__3'__3'__ 3'_3'_|
+w: jing- a- ling- a jing jing,jing- a- ling- a jing jing, Jing- a- ling jing- a- ling- a- ling- a jing jing,
+V:2
+"^pp 1=Gb; 1=3"1'__1'__1'__1'__ 1'_1'_ 1'__1'__1'__1'__ 1'_1'_| 0_1'__1'__ 1'_1'__1'__ 1'__1'__1'__1'__ 1'_1'_|
+w: jing- a- ling- a jing jing,jing- a- ling- a jing jing, Jing- a- ling jing- a- ling- a- ling- a jing jing,
+V:3
+"^pp 1=Gb; 1=3"5'__5'__5'__5'__ 5'_5'_ 5'__5'__5'__5'__ 5'_5'_| 0_5'__5'__ 6'_6'__6'__ 5'__5'__5'__5'__ 5'_5'_|
+w: jing- a- ling- a jing jing,jing- a- ling- a jing jing, Jing- a- ling jing- a- ling- a- ling- a jing jing,
+V:4
+"^p 1=Gb; 1=3"3'_3'_ 3' 3'_3'_ 3'| 3'_5'_ 1'_.2'__ 3'-|
+w:Jin- gle bells, jin- gle bells, Jin- gle all the way!
+
+V:1
+0_ !p! 4'_0_4'_ (4'_3'_)0_3'_| 3'_(2'_2'_)1'_ 2-|
+w: oh, what fun,_ what fun in_ that sleigh,
+V:2
+0_ !p! 2'_0_2'_ 1' 0_1'_| 1'_(6_6_)6_ (1' 7)|
+w: oh, what fun, what fun in_ that sleigh,
+V:3
+0_ !p! b7'_0_4'_ 5' 0_5'_| #4'_(#4'_#4'_)#4'_ 5-|
+w: oh, what fun, what fun in_ that sleigh,
+V:4
+4'_4'_ 4'_.4'__ 4'_3'_ 3'_3'__3'__| 3'_2'_2'_3'_ 2-|
+w: Oh, what fun it is to ride in a one horse o- pen sleigh,
+
+V:1
+!ff!3'_ 3'_ 3' 3'_ 3'_ 3' | 3'_ 5'_ 1'_. 2'__ 3'- |
+w: Jin- gle bells, jin- gle bells, jin- gle all the way!
+V:2
+!ff!1'_ 1'_ 7 1'_ 1'_ 7 | 1'_ 3'_ 1'_. 1'__ (1' 7) |
+w: Jin- gle bells, jin- gle bells, jin- gle all the way!
+V:3
+!ff!5'_ 5'_ #5' 5'_ 5'_ #5' | 5'_ 1''_ 6'_. 6'__ #5'- |
+w: Jin- gle bells, jin- gle bells, jin- gle all the way!
+V:4
+!ff!1'_ 1'_ 1' 1'_ 1'_ 1' | 1'_ 1'_ 4'_. 4'__ 3'- |
+w: Jin- gle bells, jin- gle bells, jin- gle all the way!
+
+V:1
+4'_4'_ 4'_.4'__ 4'_3'_ 3'_3'__3'__| 5'_5'_4'_2'_ 1'-|$
+w: Oh, what fun it is to ride in a one horse o- pen sleigh.
+V:2
+1'_1'_ #1'_.#1'__ #1'_#1'_ #1'_#1'__#1'__| 3'_3'_2'_7_ 1'-|$
+w: Oh, what fun it is to ride in a one horse o- pen sleigh.
+V:3
+6'_6'_ 5'_.5'__ 5'_5'_ 5'_6'__6'__| 6'_6'_6'_7'_ 1''-|$
+w: Oh, what fun it is to ride in a one horse o- pen sleigh.
+V:4
+4'_4'_ 4'_.4'__ 4'_3'_ 3'_3'__3'__| 5'_5'_5'_5'_ 1'-|$
+w: Oh, what fun it is to ride in a one horse o- pen sleigh.
+
+V:1
+"^1=G; (higher)1=7; unisono" 3'_ 3'_ 3' 3'_ 3'_ 3' | 3'_ 5'_ 1'_. 2'__ 3'- |
+w: Jin- gle bells, jin- gle bells, jin- gle all the way!
+V:2
+"^1=G; (higher)1=7; unisono" 3'_ 3'_ 3' 3'_ 3'_ 3' | 3'_ 5'_ 1'_. 2'__ 3'- |
+w: Jin- gle bells, jin- gle bells, jin- gle all the way!
+V:3
+"^1=G; (higher)1=7; unisono" 3'_ 3'_ 3' 3'_ 3'_ 3' | 3'_ 5'_ 1'_. 2'__ 3'- |
+w: Jin- gle bells, jin- gle bells, jin- gle all the way!
+V:4
+"^1=G; (higher)1=7; unisono" 3'_ 3'_ 3' 3'_ 3'_ 3' | 3'_ 5'_ 1'_. 2'__ 3'- |
+w: Jin- gle bells, jin- gle bells, jin- gle all the way!
+
+V:1
+4'_4'_ 4'_.4'__ 4'_3'_ 3'_3'__3'__| 3'_2'_2'_3'_ 2-|
+w: Oh, what fun it is to ride in a one horse o- pen sleigh,
+V:2
+4'_4'_ 4'_.4'__ 4'_3'_ 3'_3'__3'__| 3'_2'_2'_3'_ 2-|
+w: Oh, what fun it is to ride in a one horse o- pen sleigh,
+V:3
+4'_4'_ 4'_.4'__ 4'_3'_ 3'_3'__3'__| 3'_2'_2'_3'_ 2-|
+w: Oh, what fun it is to ride in a one horse o- pen sleigh,
+V:4
+4'_4'_ 4'_.4'__ 4'_3'_ 3'_3'__3'__| 3'_2'_2'_3'_ 2-|
+w: Oh, what fun it is to ride in a one horse o- pen sleigh,
+
+V:1
+3'_ 3'_ 3' 3'_ 3'_ 3' | 3'_ 5'_ 1'_. 2'__ 3'- | $$
+w: Jin- gle bells, jin- gle bells, jin- gle all the way!
+V:2
+3'_ 3'_ 3' 3'_ 3'_ 3' | 3'_ 5'_ 1'_. 2'__ 3'- | $$
+w: Jin- gle bells, jin- gle bells, jin- gle all the way!
+V:3
+3'_ 3'_ 3' 3'_ 3'_ 3' | 3'_ 5'_ 1'_. 2'__ 3'- | $$
+w: Jin- gle bells, jin- gle bells, jin- gle all the way!
+V:4
+3'_ 3'_ 3' 3'_ 3'_ 3' | 3'_ 5'_ 1'_. 2'__ 3'- | $$
+w: Jin- gle bells, jin- gle bells, jin- gle all the way!
+
+
+V:1
+"^sub. pp poco a poco cresc."4'_4'_ 4'_.4'__ 4'_3'_ 3'| 0 0 0 0| 5'_5'_ 5'_.5'__ 5'_#4'_ #4'|
+w: Oh, what fun it is to ride. Oh, what fun it is to ride.
+V:2
+"^sub. pp poco a poco cresc."1'_1'_ #1'_.#1'__ #1'_#1'_ #1'| 0 0 0 0| 2'_2'_ #2'_.#2'__ #2'_#2'_ #2'|
+w: Oh, what fun it is to ride. Oh, what fun it is to ride.
+V:3
+"^sub. pp poco a poco cresc."6'_6'_ 5'_.5'__ 5'_5'_ 5'| 0 0 0 0| 7'_7'_ 6'_.6'__ 6'_6'_ 6'|
+w: Oh, what fun it is to ride. Oh, what fun it is to ride.
+V:4
+"^sub. pp poco a poco cresc."4'_4'_ 4'_.4'__ 4'_3'_ 3'| 0 0 0 0| 5'_5'_ 5'_.5'__ 5'_#4'_ #4'|
+w: Oh, what fun it is to ride. Oh, what fun it is to ride.
+
+V:1
+0 0 0 0| 0 !f!!>!5'_5'_ 0 !>!#5'_#5'_| 0 !>!6'_6'_ 0 !>!7'_7'_| $
+w: Dash- ing, dash- ing, dash- ing, dash- ing.
+V:2
+0 0 0 0| 0 !f!!>!5'_5'_ 0 !>!#4'_#4'_| 0 !>!4'_4'_ 0 !>!3'_3'_| $
+w: Dash- ing, dash- ing, dash- ing, dash- ing.
+V:3
+0 0 0 0| !f!!>!5'_5'_ 0 !>!#5'_#5'_ 0 | !>!6'_6'_ 0 !>!7'_7'_ 0| $
+w: Dash- ing, dash- ing, dash- ing, dash- ing.
+V:4
+0 0 0 0| !f!!>!5'_5'_ 0 !>!#4'_#4'_ 0 | !>!4'_4'_ 0 !>!3'_3'_ 0| $
+w: Dash- ing, dash- ing, dash- ing, dash- ing.
+
+V:1
+1''_7'_6'_5'_ 4'_3'_ 2'_1'__1'__ | 5'_5'_6'_7'_ 1'' !>!"^Teriak!"X|
+w: Oh, what fun it is to ride in a one horse o- pen sleigh. Hey!
+V:2
+6'_5'_4'_3'_ 2'_1'_ b7_6__6__ | 5_5_6_5_ 1' !>!"^Teriak!"X|
+w: Oh, what fun it is to ride in a one horse o- pen sleigh. Hey!
+V:3
+4'_4'_ 4'_.4'__ 4'_3'_ 3'_3'__3'__| 5'_5'_4'_4'_ 3' !>!"^Teriak!"X|
+w: Oh, what fun it is to ride in a one horse o- pen sleigh. Hey!
+V:4
+4'_4'_ 4'_.4'__ 4'_3'_ 3'_3'__3'__| 5'_5'_4'_2'_ 1' !>!"^Teriak!"X|
+w: Oh, what fun it is to ride in a one horse o- pen sleigh. Hey!

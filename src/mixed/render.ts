@@ -106,6 +106,7 @@ export function drawNotesNormal(
       if (n.staff !== subStaff) continue;
       if (!n.visible) continue;
 
+      const noteCode = ch.sym(n.src?.notehead);
       let x: number;
       const cue = n.size === 1 || ch.cue || ch.grace;
       const scale = ch.grace ? eng.graceSize : cue ? eng.cueSize : 1;
@@ -118,7 +119,7 @@ export function drawNotesNormal(
         x = n.x;
         if (cue) {
           x = ch.stemX();
-          if (!n.rightSide()) x -= smuflWidth(meta, code) * scale;
+          if (!n.rightSide()) x -= smuflWidth(meta, noteCode) * scale;
           if (ch.noteType.compareTo(new Fraction(4)) >= 0) x += 5;
         }
         if (x < 0) continue;
@@ -128,15 +129,15 @@ export function drawNotesNormal(
       if (code === GlyphCodes.restWhole) y -= 10;
 
       if (scale !== 1) {
-        addSmuflScaled(chordGrp(), code, x, y, fs, scale, scale);
+        addSmuflScaled(chordGrp(), noteCode, x, y, fs, scale, scale);
       } else {
-        addSmufl(chordGrp(), code, x, y, fs);
+        addSmufl(chordGrp(), noteCode, x, y, fs);
       }
       // 倚音不进 NoteEntry（不参与同拍对齐），加线在这里按它自己的小号符头补画——
       // 否则 `{5,,}` 这种落到谱表外的倚音悬在半空
       if (ch.grace && !ch.rest) {
         const leg = new LegerLayout();
-        leg.addNote(n.line(), x, x + smuflWidth(meta, code) * scale);
+        leg.addNote(n.line(), x, x + smuflWidth(meta, noteCode) * scale);
         for (const [ledgerLine, [lx1, lx2]] of leg.ranges) {
           const ly = -ledgerLine * 5;
           addLine(chordGrp(), lx1 - 3 * scale, ly, lx2 + 3 * scale, ly, eng.lineWidths.leger);

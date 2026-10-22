@@ -34,6 +34,10 @@ function braceStartX(voices: readonly PlacedVoice[]): number | null {
  *  不到一个字高（太阳出来喜洋洋 A4 `0 0 | 0 0` 两行，用户定加一道空；原谱这里约 2 个字号） */
 const NO_LYRIC_VOICE_GAP_EM = 0.6;
 
+function systemRowGap(m: JianpuGrid): number {
+  return Math.max(m.style.vertical.systemGap, GROUP_CLEAR * m.style.size.lyric);
+}
+
 /**
  * 分声部（`&sbf`）之前那几个小节，没分出来的声部只是占位（`8`）：谱面上那一截是空的，小节线也不画
  * （`PlacedItem.noBarline`）。只管连谱号起点及以前、前面一整个小节都是隐藏音符的线。
@@ -76,6 +80,7 @@ export function layoutSong(
   autoVerseNumbers(song, m);
 
   const bottomLimit = m.page.height - m.page.margin.bottom;
+  const rowGap = systemRowGap(m);
   // 拍号一路带过来：头部 `1=D4/4 3/4 5/4` 这类混合拍只有首个是起头拍号，其余由曲中
   // 的 `"p:3/4"` 逐小节改写（`BarlineElement.temporaryMeter`），故要跨行延续。
   // 只有减时线分组用得着（见 beatGroups）。
@@ -225,7 +230,9 @@ export function layoutSong(
         const lastInk = ink.text(texts[texts.length - 1]!.text, "words").ink;
         y = Math.max(y, textY + (texts.length - 1) * wordsLead(m) + lastInk.bottom + m.style.vertical.systemGap);
       }
-      const box = expanded ? slideBlock(pre.map((p) => ({ pv: p.pv, inkBottom: p.inkBottom })), ink) : { top: 0, bottom: y };
+      const box = expanded
+        ? slideBlock(pre.map((p) => ({ pv: p.pv, inkBottom: p.inkBottom })), ink)
+        : groupBounds(placedGroup, m, ink);
       blocks.push({ group: placedGroup, ...box, breakBefore: groupIdx === 0 && pageIdx > 0 });
     }
   }
@@ -242,19 +249,10 @@ export function layoutSong(
     if (a.bottom < need) a.bottom = need;
   }
   // 首页要让过标题/词曲/调号那一整块——头部行数因谱而异，写死会压到正文
-  // headerBottom 是页首的**墨迹底**（compose/header.ts::headerBottom）。页首 → 首组**真正的墨迹顶**只空一行
-  // （歌词字高，与 system 间距同口径）：墨迹顶取首声部数字/高八度点、和弦等头顶记号、`W:` 文字行里
-  // 最高的那个——只按数字顶算，首组头顶有「引子」这类文字行时一行空隙就被吃掉了。
-  // 不再拿 bodyTop 兜底（兜底会把「只空一行」重新撑大）；没传页首（0）时才用 bodyTop。
+  // 页眉与正文之间沿用行间距，并按正文实际占位盒顶定位。
   let firstTop = m.page.margin.top + m.page.firstSystemTop;
   const g0 = blocks[0]?.group;
-  if (headerBottom > 0 && g0) {
-    const v0 = g0.voices[0];
-    let inkTop = (v0?.y ?? 0) + (v0?.top ?? -m.ink.noteHeight / 2);
-    const t0 = g0.group.texts[0];
-    if (t0) inkTop = Math.min(inkTop, g0.textY + ink.text(t0.text, "words").ink.top);
-    firstTop = headerBottom + m.style.size.lyric - inkTop;
-  }
+  if (headerBottom > 0 && g0) firstTop = headerBottom + rowGap;
   const otherTop = m.page.margin.top + m.page.firstSystemTop * 0.35;
   // 展开档、成书：同旧简谱引擎 `Layout.layoutVertically`——块按占位盒紧挨着码（块间 `staffDist`），放不满的页把行距摊开到 `systemSpread`、整块居中
   const laid = expanded ? paginate(blocks, {
@@ -266,7 +264,7 @@ export function layoutSong(
     pageTop: (i) => (i === 0 ? firstTop : otherTop),
     // 连续长图不按高度分页，页高随内容长
     bottom: m.page.longImage ? Infinity : bottomLimit,
-    gap: 0,
+    gap: rowGap,
   });
   if (laid.length === 0) return [{ groups: [], song: songIndex, firstOfSong: true }];
   return laid.map((pg, i) => ({
@@ -279,6 +277,38 @@ export function layoutSong(
       return block.group;
     }),
   }));
+}
+
+function groupBounds(group: PlacedGroup, m: JianpuGrid, ink: InkMeasurer): { top: number; bottom: number } {
+  let top = Infinity;
+  let bottom = -Infinity;
+  const lyricBox = ink.fontBox("lyric");
+  const annotationScale = Math.max(1, m.style.size.verseNum / m.style.size.lyric);
+  for (const voice of group.voices) {
+    top = Math.min(top, voice.y + voice.top, voice.y - m.ink.noteHeight / 2);
+    const downwardShift = Math.max(
+      0,
+      ...voice.items.map((item) => item.dy ?? 0),
+      ...voice.underlines.map((underline) => underline.dy ?? 0),
+    );
+    bottom = Math.max(bottom, voice.y + lineInkBottom(voice.items, m) + downwardShift);
+    voice.lyricY.forEach((baseline, index) => {
+      const scale = voice.voice.lyrics[index]?.annotation ? annotationScale : 1;
+      top = Math.min(top, baseline + lyricBox.top * scale);
+      bottom = Math.max(bottom, baseline + lyricBox.bottom * scale);
+    });
+  }
+  if (group.hasBrace) {
+    top = Math.min(top, group.braceTop - braceReach(m));
+    bottom = Math.max(bottom, group.braceBottom + braceReach(m));
+  }
+  group.group.texts.forEach((line, index) => {
+    const bounds = ink.text(line.text, "words").ink;
+    const baseline = group.textY + index * wordsLead(m);
+    top = Math.min(top, baseline + bounds.top);
+    bottom = Math.max(bottom, baseline + bounds.bottom);
+  });
+  return Number.isFinite(top) && Number.isFinite(bottom) ? { top, bottom } : { top: 0, bottom: 0 };
 }
 
 /**
@@ -305,6 +335,7 @@ export function layoutDocument(
   songs: readonly PuSong[],
   m: JianpuGrid,
   headerBottoms: readonly number[] = [],
+  headerTops: readonly number[] = [],
   ink: InkMeasurer,
   /** 各首页脚（BL/BC/BR）从本曲最低一行往下占多高（compose/footer.ts::footerSpan）；连续长图接下一首时要让开 */
   footerSpans: readonly number[] = [],
@@ -318,24 +349,20 @@ export function layoutDocument(
   // 换曲时连页眉一起接：页眉整块下移（`PlacedPage.headers`），本曲的谱跟着同一个量走——layoutSong 已按页眉高排好首组
   if (m.page.longImage && pages.length > 1) {
     const merged: PlacedPage = { groups: [], song: pages[0]!.song, firstOfSong: pages[0]!.firstOfSong, headers: [] };
+    const rowGap = systemRowGap(m);
     for (const [i, pg] of pages.entries()) {
       if (i > 0) {
         const prev = pages[i - 1]!;
-        const low = lowestOf(merged) + (pg.song !== prev.song ? footerSpans[prev.song] ?? 0 : 0);
+        const low = lowestOf(merged, m, ink) + (pg.song !== prev.song ? footerSpans[prev.song] ?? 0 : 0);
         let offset: number;
         if (pg.firstOfSong) {
-          // 页眉墨迹顶约在标题基线上一个标题字号
-          const headTop = m.head.titleBaseline - m.style.header.title.size;
-          offset = low + m.style.vertical.systemGap * 2 - headTop;
+          const headTop = headerTops[pg.song] ?? (m.head.titleBaseline - m.style.header.title.size);
+          offset = low + rowGap - headTop;
           merged.headers!.push({ song: pg.song, dy: offset });
         } else {
           const g0 = pg.groups[0];
-          let top = g0?.voices[0]?.y ?? 0;
-          if (g0 && g0.group.texts.length > 0) top = Math.min(top, g0.textY - m.style.size.words);
-          offset = low + m.style.vertical.systemGap * 1.4 - top;
-          // 首组头顶（房号、和弦、弧）也得让开上一页末行：至少留组间那道空（GROUP_CLEAR，同 layoutSong 组间），
-          // 只按基线留会压上去（123 的 `$$` 换页后首行带房号，064《啊！圣善夜》）
-          if (g0) offset = Math.max(offset, low + GROUP_CLEAR * m.style.size.lyric - Math.min(...g0.voices.map((v) => v.y + v.top)));
+          const top = g0 ? groupBounds(g0, m, ink).top : 0;
+          offset = low + rowGap - top;
         }
         for (const g of pg.groups) shiftGroup(g, offset);
       }
@@ -347,7 +374,7 @@ export function layoutDocument(
   return {
     pages,
     metrics: m,
-    contentBottom: pages.reduce((b, p) => Math.max(b, lowestOf(p)), 0),
+    contentBottom: pages.reduce((b, p) => Math.max(b, lowestOf(p, m, ink)), 0),
     contentRight: pages.reduce((r, p) => Math.max(r, rightmostOf(p)), 0),
   };
 }
@@ -369,14 +396,8 @@ function rightmostOf(page: PlacedPage): number {
 }
 
 /** 一页里最下沿的 y（末行歌词或末个声部）。 */
-function lowestOf(page: PlacedPage): number {
-  let bottom = 0;
-  for (const g of page.groups) {
-    for (const v of g.voices) {
-      bottom = Math.max(bottom, v.y, ...v.lyricY);
-    }
-  }
-  return bottom;
+function lowestOf(page: PlacedPage, m: JianpuGrid, ink: InkMeasurer): number {
+  return Math.max(0, ...page.groups.map((group) => groupBounds(group, m, ink).bottom));
 }
 
 function shiftGroup(g: PlacedGroup, dy: number): void {

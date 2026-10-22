@@ -116,6 +116,7 @@ export function layoutJianpu(source: ScoreDoc, cfg: JianpuLayoutConfig): JianpuL
   const headMeasure = headerMeasurer(m);
   c.heads = slide || cfg.snippet ? [] : input.songs.map((song) => placeHeader(song.metadata, m, headMeasure));
   const headerBottoms = c.heads.map((h) => h.bottom);
+  const headerTops = c.heads.map((h) => h.top);
   // 量具注入给排版（它不碰字体）。歌词量的是**画出来的**那串：与 paintSyllables 同一串挤压后的笔位，
   // 首尾留白的口径同旧简谱引擎的 `Lyric.headBlank / tailBlank`（横向避让的判据从那边整段搬来，见 place/spacing.ts）
   const lyricFont = new Font(m.style.font.lyric.family, m.style.size.lyric);
@@ -194,7 +195,7 @@ export function layoutJianpu(source: ScoreDoc, cfg: JianpuLayoutConfig): JianpuL
       if (changed) return layoutJianpu(clone, { ...cfg, noReflow: true, reflowSource: cfg.reflowSource ?? source });
     }
   }
-  const placed = layoutDocument(doc.songs, m, headerBottoms, ink, doc.songs.map((_, i) => footerSpan(c, i)), slide);
+  const placed = layoutDocument(doc.songs, m, headerBottoms, headerTops, ink, doc.songs.map((_, i) => footerSpan(c, i)), slide);
   // 展开档：第一页是标题页（谱页从第二页起，页码不含它）
   if (plans) placed.pages.unshift({ groups: [], song: 0, firstOfSong: false, titlePage: true });
   c.placed = placed;

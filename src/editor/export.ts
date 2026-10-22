@@ -315,7 +315,10 @@ export async function exportAsPrintedPdf(app: App): Promise<void> {
   const pages = await Promise.all(svgs.map(async (svg) => {
     const { width, height } = svgSize(svg);
     const clone = svg.cloneNode(true) as SVGSVGElement;
-    stripPreviewAnnotations(clone);
+    clone.querySelectorAll(".preview-bar-number").forEach((el) => {
+      el.setAttribute("fill", "#000");
+      el.setAttribute("opacity", "0.8");
+    });
     clone.setAttribute("xmlns", SVG_NS);
     clone.setAttribute("width", `${width}pt`);
     clone.setAttribute("height", `${height}pt`);

@@ -14,6 +14,7 @@ export const GlyphCodes = {
   noteheadWhole: String.fromCharCode(0xe0a2),
   noteheadHalf: String.fromCharCode(0xe0a3),
   noteheadBlack: String.fromCharCode(0xe0a4),
+  noteheadXBlack: String.fromCharCode(0xe0a9),
   noteheadSlashVerticalEnds: String.fromCharCode(0xe100),
   noteheadSlashDiamondWhite: String.fromCharCode(0xe104),
   // Flags
@@ -116,6 +117,7 @@ const codeToName: Record<string, string> = {
   [GlyphCodes.noteheadWhole]: "noteheadWhole",
   [GlyphCodes.noteheadHalf]: "noteheadHalf",
   [GlyphCodes.noteheadBlack]: "noteheadBlack",
+  [GlyphCodes.noteheadXBlack]: "noteheadXBlack",
   [GlyphCodes.noteheadSlashVerticalEnds]: "noteheadSlashVerticalEnds",
   [GlyphCodes.flag8thUp]: "flag8thUp",
   [GlyphCodes.flag8thDown]: "flag8thDown",

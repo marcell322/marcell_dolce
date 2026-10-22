@@ -539,7 +539,8 @@ export class ChordLayout {
   }
 
   /** 音符头/休止符 SMuFL 字形（Chord::sym，model.cpp:1696）。 */
-  sym(): string {
+  sym(notehead?: string): string {
+    if (notehead?.trim() === "x") return GlyphCodes.noteheadXBlack;
     const nt = this.noteType;
     if (this.rest) {
       if (this.measureRest) return GlyphCodes.restWhole;

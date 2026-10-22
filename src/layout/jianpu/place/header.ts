@@ -39,6 +39,8 @@ export interface PlacedHeader {
   meterDy: number;
   /** 页首的**墨迹底**；正文首组墨迹顶离它空一行（place/song.ts::layoutSong） */
   bottom: number;
+  /** 页首的墨迹顶（连续长图中用来与上一谱行保持固定间距） */
+  top: number;
 }
 
 /** 拍号分数线粗细（`time-sig-rule`；0 = 与减时线同粗）。 */
@@ -82,9 +84,11 @@ export function placeHeader(meta: Metadata, m: JianpuGrid, ink: HeaderMeasurer):
   const titleSize = hs.title.size * k;
   const subSize = hs.subtitle.size * k;
   let titleInkBottom = 0;
+  let headerInkTop = Infinity;
   const centred = (text: string, role: HeaderTextRole, baseline: number): void => {
     const r = measure(text, role);
     lines.push({ role, text, anchor: "center", dx: -r.advance / 2, baseline });
+    headerInkTop = Math.min(headerInkTop, baseline + r.top);
     titleInkBottom = Math.max(titleInkBottom, baseline + r.bottom);
   };
   let y = m.head.titleBaseline;
@@ -112,11 +116,13 @@ export function placeHeader(meta: Metadata, m: JianpuGrid, ink: HeaderMeasurer):
     if (!t) return;
     const r = measure(t, role);
     lines.push({ role, text: t, anchor: "right", dx: -r.advance, baseline: blockTop + i * lh });
+    headerInkTop = Math.min(headerInkTop, blockTop + i * lh + r.top);
     blockBottom = Math.max(blockBottom, blockTop + i * lh + r.bottom);
   });
   tl.forEach((t, i) => {
     if (!t) return;
     lines.push({ role: "top", text: t, anchor: "left", dx: 0, baseline: blockTop + i * lh });
+    headerInkTop = Math.min(headerInkTop, blockTop + i * lh + measure(t, "top").top);
     blockBottom = Math.max(blockBottom, blockTop + i * lh + measure(t, "top").bottom);
   });
 
@@ -136,6 +142,7 @@ export function placeHeader(meta: Metadata, m: JianpuGrid, ink: HeaderMeasurer):
     keyY = m.head.keyMeterBaseline;
   }
   let keyBottom = keyY + key.bottom;
+  headerInkTop = Math.min(headerInkTop, keyY + key.top);
 
   // `J:` 里的文字部分（「深情地」「高亢、自由地」）排在调号拍号**下一行**，左对齐；数字部分是速度值，不印在这里
   const tempoWords = meta.tempos.filter((t): t is string => typeof t === "string" && t !== "");
@@ -143,14 +150,20 @@ export function placeHeader(meta: Metadata, m: JianpuGrid, ink: HeaderMeasurer):
     const text = tempoWords.join(" ");
     const baseline = keyY + m.style.size.keyMeter * 1.55;
     lines.push({ role: "tempo", text, anchor: "left", dx: 0, baseline });
+    const tempoInk = ink.headerText(text, "tempo").ink;
+    headerInkTop = Math.min(headerInkTop, baseline + tempoInk.top);
     keyBottom = baseline + m.style.size.keyMeter * 0.85 * 0.15;
   }
 
   // 序号：左上对齐 system 左缘、右上对齐版心右缘，与标题同基线
-  if (meta.indexLeft) lines.push({ role: "index", text: meta.indexLeft, anchor: "left", dx: 0, baseline: m.head.titleBaseline });
+  if (meta.indexLeft) {
+    lines.push({ role: "index", text: meta.indexLeft, anchor: "left", dx: 0, baseline: m.head.titleBaseline });
+    headerInkTop = Math.min(headerInkTop, m.head.titleBaseline + ink.headerText(meta.indexLeft, "index").ink.top);
+  }
   if (meta.indexRight) {
     const r = measure(meta.indexRight, "index");
     lines.push({ role: "index", text: meta.indexRight, anchor: "right", dx: -r.advance, baseline: m.head.titleBaseline });
+    headerInkTop = Math.min(headerInkTop, m.head.titleBaseline + r.top);
   }
 
   // 只报页首的**墨迹底**；「空一行」由 layout 量到首组真正的墨迹顶（和弦、W: 文字行、弧线都算），
@@ -161,6 +174,7 @@ export function placeHeader(meta: Metadata, m: JianpuGrid, ink: HeaderMeasurer):
     keyBaseline: keyY,
     meterDy: key.eqMid + timeSigRule(m) / 2,
     bottom: Math.max(titleInkBottom, blockBottom, keyBottom),
+    top: Number.isFinite(headerInkTop) ? headerInkTop : 0,
   };
 }
 
