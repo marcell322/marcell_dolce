@@ -1,0 +1,82 @@
+%123-1.0
+
+X:1
+T:Away in a Manger
+C:William Kirkpatrick (1838-1921)
+C:Philip Lawson
+C:Translate by, Marcell.
+K:1=G
+M:3/4
+Q:1/4=69 "1/4=69"
+V:1 name="B1"
+!mf!4 | [M:4/4] !diminuendo(!4- (!diminuendo)!1- | [M:3/4] 1--) | $
+w:Be Near me,
+0 0 !mp!4 | [M:4/4] !diminuendo(!4- (!diminuendo)!1- | [M:3/4] 1--) | 0 0 0 | 0 0 0 | $
+w:Lord Je-sus.
+V:2 name="B2"
+!mf!4 | [M:4/4] !diminuendo(!4- (!diminuendo)!1- | [M:3/4] 1--) | $
+w:Be Near me,
+0 0 !mp!4 | [M:4/4] !diminuendo(!4- (!diminuendo)!1- | [M:3/4] 1--) | 0 0 0 | 0 0 0 | $
+w:Lord Je-sus.
+V:1
+0 0 0 | 0 0 0 | 0 0 0 | 0 0 0 | 0 0 0 | $
+0 0 0 | 0 0 0 | 0 0 0 | 0 0 0 | $
+0 0 0 | 0 0 0 | 0 0 0 | 0 0 0 | $
+!mf!5, | 1 1 (2_ 3_) | 1 1 (3_ 4_) | 5 5 6 | 4- !p!(2_ 3_) | $
+w:The cat-tle are_low-ing the_ba-by a-wakes,but_
+4 4 5 | 3 3 (1_ 3_) | 2 6, 1 | 7,- 5, | $
+w:lit-tle Lord Je-sus,no_cry-ing He makes.I
+1 1 (2_ 3_) | 1 1 (3_ 4_) | 5 5 6 | 4- (2_ 3_) | $
+w:love Thee,Lord_Je-sus!Look_down from the sky,and_
+4 4 5 | 3 3 (1_ 3_) | 2 6, 7, | 1-- | $
+w:stay by my side un-til_mor-ning is nigh.
+V:2
+0 0 0 | 0 0 0 | 0 0 0 | 0 0 0 | 0 0 0 | $
+0 0 0 | 0 0 0 | 0 0 0 | 0 0 0 | $
+0 0 0 | 0 0 0 | 0 0 0 | 0 0 0 | $
+!mf!5, | 1 1 (2_ 3_) | 1 1 (3_ 4_) | 5 5 6 | 4- !p!(2_ 3_) | $
+w:The cat-tle are_low-ing the_ba-by a-wakes,but_
+4 4 5 | 3 3 (1_ 3_) | 2 6, 1 | 7,- 5, | $
+w:lit-tle Lord Je-sus,no_cry-ing He makes.I
+1 1 (2_ 3_) | 1 1 (3_ 4_) | 5 5 6 | 4- (2_ 3_) | $
+w:love Thee,Lord_Je-sus!Look_down from the sky,and_
+4 4 5 | 3 3 (1_ 3_) | 2 6, 7, | 1-- | $
+w:stay by my side un-til_mor-ning is nigh.
+V:1
+"Unisono"0 0 0 | 0 0 0 | 0 0 0 | 0 0 0 | 0 0 0 | $
+0 0 0 | 0 0 0 | 0 0 1 | $
+w:Be
+"1=G; 1=(lower)5" 1 1 (2_ 3_) | 1 1 (3_ 4_) | 5 5 6 | 4- $
+w:near me.Lord_Je-sus;I_ask thee to stay
+(2_ 3_) | 4 4 5 | 3 3 (1_ 3_) | 2 6, 1 | 7,- 5, | $$
+w:close_by my for-e-ver,and_love me,I pray.Bless
+1 1 (2_ 3_) | 1 1 (3_ 4_) | 5 5 6 | 4- $
+w:all the dear_chil-dren in_Thy ten-der care,
+(2_ 3_) | 4 4 5 | 3 3 (1_ 3_) | 2 6, 7, | !diminuendo(!1--!diminuendo)! | $
+w:and_fit us for heav-en,to_live with Thee there.
+V:2
+"Unisono"0 0 0 | 0 0 0 | 0 0 0 | 0 0 0 | 0 0 0 | $
+0 0 0 | 0 0 0 | 0 0 1 | $
+w:Be
+"1=G; 1=(lower)5" 1 1 (2_ 3_) | 1 1 (3_ 4_) | 5 5 6 | 4- $
+w:near me.Lord_Je-sus;I_ask thee to stay
+(2_ 3_) | 4 4 5 | 3 3 (1_ 3_) | 2 6, 1 | 7,- 5, | $$
+w:close_by my for-e-ver,and_love me,I pray.Bless
+1 1 (2_ 3_) | 1 1 (3_ 4_) | 5 5 6 | 4- $
+w:all the dear_chil-dren in_Thy ten-der care,
+(2_ 3_) | 4 4 5 | 3 3 (1_ 3_) | 2 6, 7, | !diminuendo(!1--!diminuendo)! | $
+w:and_fit us for heav-en,to_live with Thee there.
+V:1
+0 0 0 | 0 0 0 | 0 0 0 | 0 0 0 | 0 0 !mp!(1_ 3_) | $
+w:to_
+2- (6, | 6,) 7,- | (1-- | 1) 0 !crescendo(!1 | !crescendo)!4- (1 | !diminuendo(!1--!diminuendo)!) | $
+w:live with_Thee there._Be near me_
+!p!(1-- | 1-- | 1-"allarg."- | 1-- | 1-- | 1-- | !fermata!5,--) |
+w:oo
+V:2
+0 0 0 | 0 0 0 | 0 0 0 | 0 0 0 | 0 0 !mp!(1_ 3_) | $
+w:to_
+2- (6, | 6,) 7,- | (1-- | 1) 0 !crescendo(!1 | !crescendo)!4- (1 | !diminuendo(!1--!diminuendo)!) | $
+w:live with_Thee there._Be near me_
+!p!(1-- | 1-- | 1-"allarg."- | 1-- | 1-- | 1-- | !fermata!1,--) |
+w:oo

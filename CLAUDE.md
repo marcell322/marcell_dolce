@@ -5,6 +5,10 @@
 草稿库 IndexedDB 名 `dolce`、MusicXML 写出端署名 `Dolce`。旧名下的设置与草稿不迁移。
 排版、渲染、模型、编辑全在前端 TS；Rust 只做原生加速（见架构决策 A3/A4）。
 
+## Agent response language
+
+- Respond to the user in English by default, including explanations, summaries, and status updates, even if the request or conversation is in Chinese. Use another language only when the user explicitly requests it.
+
 文档分四层，**动某一块之前先翻对应那层**——那些阈值和判据多半是拿具体曲子换来的，别照直觉改：
 
 - [docs/需求.md](docs/需求.md) 做什么 · [docs/架构.md](docs/架构.md) 怎么分层、哪些决策不要推翻
@@ -25,7 +29,7 @@
 
 - 测试语料与 GT（`testdata/`）只留本地，不入库；`testdata/` 只放语料与 GT，回归基线、快照、报告等派生数据放本地私有仓库。
   各模块页的「回归」一节同此。
-- 提交信息用简要中文，不要 `Co-Authored-By` 尾注。
+- Use concise English commit messages.
 - TS 严格模式 + `noUnusedLocals/Parameters`。
 - **界面文字走 `t()` / `data-i18n`**（`src/i18n/`），不在界面代码里写中文字面量；新键 zh.ts、en.ts 两边同加，见 [编辑器](docs/模块/编辑器.md)「界面语言」。
 - **PUA 码位用 `String.fromCharCode(0x...)`**，切勿在源码里写字面 PUA 字符（Write 工具会损坏字节）。
