@@ -34,6 +34,8 @@ public/redist/pdfjs
 
 # 国标（简谱/五线谱通用规范）原件与转出的 md，本地参考，不入库
 docs/规范/
+docs/*.123
+docs/*.pdf
 
 
 # ss 语法收敛的待办（本地保留，不入库）
