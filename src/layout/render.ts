@@ -69,6 +69,7 @@ export function svgVisitor(nodeMap?: WeakMap<PageItem, SVGGElement>): ItemVisito
   const enter = (item: PageItem, parent: SVGGElement): SVGGElement => {
     const g = document.createElementNS(SVG_NS, "g");
     if (!item.matrix.isIdentity) g.setAttribute("transform", item.matrix.toSvg());
+    if (item.classes.has("system")) g.setAttribute("data-pdf-system", "");
     parent.appendChild(g);
     nodeMap?.set(item, g);
     return g;

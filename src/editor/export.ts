@@ -1,4 +1,4 @@
-// Export: PNG (rasterize page SVG), MIDI (SMF), PPTX, Mixed PDF.
+// Export: PNG (rasterize page SVG), MIDI (SMF), PPTX, and vector PDFs.
 import type { App } from "./app";
 import { toMidi } from "../score/midi";
 import { buildPptx } from "./pptx";
@@ -17,6 +17,7 @@ import { engraveScoreDoc } from "../mixed/engrave";
 import { colorToCss } from "../common/geom";
 import { t } from "../i18n";
 import { openModal } from "./dialogs";
+import { pdfPagesOfSvg, type PdfSvgPage } from "./pdf";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 
@@ -50,22 +51,6 @@ async function musicFontDataUrl(file: string): Promise<string> {
       }));
   }
   return musicFontDataUrls.get(file)!;
-}
-
-/** 给一页 SVG 铺上纸张底色（插一个满幅 rect 到最底层）。
- *  页面树里没有背景这一层——屏幕上靠 CSS 铺（见 App._applyPageBg），
- *  而 SVG 一旦离开浏览器（直出 PDF）就只剩透明底，所以导出时要显式铺一次。
- *  白底不铺：PDF 的纸本来就是白的，少一个无用图元。 */
-function paintBg(svg: SVGSVGElement, bgColor: number): void {
-  if (((bgColor >>> 0) & 0xffffff) === 0xffffff) return;
-  const { width: w, height: h } = svgSize(svg);
-  const rect = document.createElementNS(SVG_NS, "rect");
-  rect.setAttribute("x", "0");
-  rect.setAttribute("y", "0");
-  rect.setAttribute("width", String(w));
-  rect.setAttribute("height", String(h));
-  rect.setAttribute("fill", colorToCss(bgColor));
-  svg.insertBefore(rect, svg.firstChild);
 }
 
 /** Serialize a page <svg> with Bravura embedded so it rasterizes faithfully.
@@ -234,7 +219,6 @@ export async function exportPuMusicXml(app: App): Promise<void> {
 export async function exportMixedPdf(app: App): Promise<void> {
   const painter = app.mixedPainter;
   if (!painter || app.mode !== "mixed") return;
-  const { w: wPt, h: hPt } = painter.pageSize(0);
 
   if (isTauriRuntime()) {
     // Tauri path: serialize SVGs and invoke Rust export_pdf command
@@ -243,25 +227,44 @@ export async function exportMixedPdf(app: App): Promise<void> {
     const title = painter.title || t("export.mixedName");
     const outPath = await save({ defaultPath: `${title}.pdf`, filters: [{ name: "PDF", extensions: ["pdf"] }] });
     if (!outPath) return;
-    const pages: string[] = [];
+    const pages: PdfSvgPage[] = [];
     for (let i = 0; i < painter.pageCount; i++) {
       const svg = painter.renderPage(i);
+      const { width, height } = svgSize(svg);
+      const { w: widthPt } = painter.pageSize(i);
       svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-      svg.setAttribute("width", `${wPt}pt`);
-      svg.setAttribute("height", `${hPt}pt`);
-      paintBg(svg, app.bgColor);
-      pages.push(new XMLSerializer().serializeToString(svg));
+      await outlineBravuraText(svg);
+      pages.push(...pdfPagesOfSvg(svg, width, height, app.bgColor, widthPt / width));
     }
-    await invoke("export_pdf_cmd", { pagesSvg: pages, widthPt: wPt, heightPt: hPt, outPath });
+    const first = pages[0]!;
+    await invoke("export_pdf_cmd", {
+      pagesSvg: pages.map(({ svg }) => new XMLSerializer().serializeToString(svg)),
+      widthPt: first.width,
+      heightPt: first.height,
+      outPath,
+    });
   } else {
-    const { jsPDF } = await import("jspdf");
-    const orientation = wPt >= hPt ? "landscape" : "portrait";
-    const pdf = new jsPDF({ unit: "pt", format: [wPt, hPt], orientation, compress: true });
+    const [{ jsPDF }, { svg2pdf }] = await Promise.all([import("jspdf"), import("svg2pdf.js")]);
+    const pages: PdfSvgPage[] = [];
     for (let i = 0; i < painter.pageCount; i++) {
       const svg = painter.renderPage(i);
-      const png = await svgToBytes(svg, 2, colorToCss(app.bgColor));
-      if (i > 0) pdf.addPage([wPt, hPt], orientation);
-      pdf.addImage(png, "PNG", 0, 0, wPt, hPt, undefined, "FAST");
+      const { width, height } = svgSize(svg);
+      const { w: widthPt } = painter.pageSize(i);
+      svg.setAttribute("xmlns", SVG_NS);
+      await outlineBravuraText(svg);
+      pages.push(...pdfPagesOfSvg(svg, width, height, app.bgColor, widthPt / width));
+    }
+    const first = pages[0]!;
+    const pdf = new jsPDF({
+      unit: "pt",
+      format: [first.width, first.height],
+      orientation: first.width >= first.height ? "landscape" : "portrait",
+      compress: true,
+    });
+    for (let i = 0; i < pages.length; i++) {
+      const page = pages[i]!;
+      if (i > 0) pdf.addPage([page.width, page.height], page.width >= page.height ? "landscape" : "portrait");
+      await svg2pdf(page.svg, pdf, { x: 0, y: 0, width: page.width, height: page.height });
     }
     const bytes = new Uint8Array(pdf.output("arraybuffer"));
     await saveBytes(bytes, `${painter.title || t("export.staffName")}.pdf`, "application/pdf");
@@ -312,7 +315,8 @@ export async function exportAsPrintedPdf(app: App): Promise<void> {
     .filter((svg): svg is SVGSVGElement => svg instanceof SVGSVGElement);
   if (!svgs.length) throw new Error(t("export.noSvg"));
 
-  const pages = await Promise.all(svgs.map(async (svg) => {
+  const pages: PdfSvgPage[] = [];
+  for (const svg of svgs) {
     const { width, height } = svgSize(svg);
     const clone = svg.cloneNode(true) as SVGSVGElement;
     clone.querySelectorAll(".preview-bar-number").forEach((el) => {
@@ -323,9 +327,8 @@ export async function exportAsPrintedPdf(app: App): Promise<void> {
     clone.setAttribute("width", `${width}pt`);
     clone.setAttribute("height", `${height}pt`);
     await outlineBravuraText(clone);
-    paintBg(clone, app.bgColor);
-    return { svg: clone, width, height };
-  }));
+    pages.push(...pdfPagesOfSvg(clone, width, height, app.bgColor));
+  }
   const filename = `${baseName(app)}.pdf`;
 
   if (isTauriRuntime()) {
@@ -333,21 +336,22 @@ export async function exportAsPrintedPdf(app: App): Promise<void> {
     const { save } = await import("@tauri-apps/plugin-dialog");
     const outPath = await save({ defaultPath: filename, filters: [{ name: "PDF", extensions: ["pdf"] }] });
     if (!outPath) return;
+    const first = pages[0]!;
     await invoke("export_pdf_cmd", {
       pagesSvg: pages.map(({ svg }) => new XMLSerializer().serializeToString(svg)),
-      widthPt: pages[0].width,
-      heightPt: pages[0].height,
+      widthPt: first.width,
+      heightPt: first.height,
       outPath,
     });
     return;
   }
 
   const [{ jsPDF }, { svg2pdf }] = await Promise.all([import("jspdf"), import("svg2pdf.js")]);
-  const first = pages[0];
+  const first = pages[0]!;
   const orientation = first.width >= first.height ? "landscape" : "portrait";
   const pdf = new jsPDF({ unit: "pt", format: [first.width, first.height], orientation, compress: true });
   for (let i = 0; i < pages.length; i++) {
-    const page = pages[i];
+    const page = pages[i]!;
     const pageOrientation = page.width >= page.height ? "landscape" : "portrait";
     if (i > 0) pdf.addPage([page.width, page.height], pageOrientation);
     await svg2pdf(page.svg, pdf, { x: 0, y: 0, width: page.width, height: page.height });
